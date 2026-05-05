@@ -3,247 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T-Bank Premium</title>
+    <title>T-Bank Clone</title>
     <style>
         :root {
-            --bg: #000000;
-            --card: #1c1c1e;
-            --secondary: #2c2c2e;
-            --text-main: #ffffff;
-            --text-gray: #8e8e93;
-            --accent-purple: #7b43f1;
-            --accent-blue: #0a84ff;
+            --bg-black: #000000;
+            --card-bg: #1c1c1e;
         }
 
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            -webkit-tap-highlight-color: transparent;
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: var(--bg-black);
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow-x: hidden;
         }
 
-        .app {
+        /* Контейнер приложения */
+        .app-wrapper {
+            position: relative;
             width: 100%;
             max-width: 430px;
+            margin: 0 auto;
             min-height: 100vh;
-            padding: env(safe-area-inset-top) 16px 100px 16px;
-            box-sizing: border-box;
+            background: url('фон.jpg') no-repeat top center;
+            background-size: 100%;
         }
 
-        /* HEADER */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
+        /* Слой для элементов, чтобы они перекрывали фон в нужных местах */
+        .element {
+            position: absolute;
+            background-size: contain;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            transition: transform 0.1s;
         }
-        .profile { display: flex; align-items: center; gap: 12px; }
-        .avatar { 
-            width: 40px; height: 40px; background: var(--secondary); 
-            border-radius: 50%; display: flex; align-items: center; 
-            justify-content: center; font-weight: bold; font-size: 18px;
-        }
-        .user-info { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
-        .bonus-badge { 
-            background: var(--accent-purple); padding: 8px 14px; 
-            border-radius: 12px; font-size: 13px; font-weight: 600; 
+        .element:active { transform: scale(0.98); }
+
+        /* Поиск */
+        .search-bar {
+            top: 178px; left: 16px; right: 16px;
+            height: 44px;
+            background-image: url('поиск.jpg');
         }
 
-        /* SEARCH */
-        .search-box {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 12px 16px;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .search-box input {
-            background: transparent; border: none; color: white;
-            font-size: 17px; width: 100%; outline: none;
+        /* Кэшбэк и бонусы */
+        .bonus-section {
+            top: 448px; right: 16px;
+            width: 180px; height: 160px;
+            background-image: url('бонус кэш.jpg');
         }
 
-        /* STORIES */
-        .stories {
-            display: flex; gap: 10px; overflow-x: auto;
-            margin: 0 -16px 24px -16px; padding: 0 16px;
-            scrollbar-width: none;
-        }
-        .stories::-webkit-scrollbar { display: none; }
-        .story {
-            min-width: 104px; height: 130px; border-radius: 16px;
-            padding: 12px; font-size: 12px; font-weight: 600;
-            display: flex; flex-direction: column; justify-content: flex-end;
-            background-size: cover; border: 1px solid #333;
+        /* Мой счет (Карта) */
+        .account-section {
+            top: 628px; left: 16px; right: 16px;
+            height: 165px;
+            background-image: url('карта.jpg');
         }
 
-        /* GRID CARDS */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-        .card { background: var(--card); border-radius: 20px; padding: 20px; position: relative; }
-        .card h3 { margin: 0; font-size: 17px; font-weight: 600; }
-        .card p { color: var(--text-gray); font-size: 14px; margin: 6px 0 0 0; }
-        
-        .progress-bar {
-            height: 4px; background: linear-gradient(90deg, #ff9500, #ff2d55, #5856d6);
-            border-radius: 2px; margin-top: 15px; width: 80%;
+        /* Новый квест */
+        .quest-section {
+            top: 808px; left: 16px; right: 16px;
+            height: 120px;
+            background-image: url('новый квест.jpg');
         }
 
-        /* ACCOUNT */
-        .account-card {
-            background: var(--card); border-radius: 24px; padding: 20px;
-            display: flex; align-items: center; justify-content: space-between;
-            cursor: pointer; transition: transform 0.1s;
-        }
-        .account-card:active { transform: scale(0.98); }
-        .account-info { display: flex; align-items: center; gap: 16px; }
-        .acc-icon { 
-            width: 44px; height: 44px; background: #2c2c2e; 
-            border-radius: 50%; display: flex; align-items: center; 
-            justify-content: center; color: var(--accent-blue); font-weight: bold;
-        }
-        .acc-balance { font-size: 19px; font-weight: 700; }
-        .acc-name { color: var(--text-gray); font-size: 14px; }
-
-        /* BOTTOM MENU (SHEET) */
-        .overlay {
+        /* Модальное окно карты */
+        .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); z-index: 999; display: none;
+            background: rgba(0,0,0,0.8); display: none; z-index: 100;
         }
-        .sheet {
+        .bottom-sheet {
             position: fixed; bottom: -100%; left: 0; width: 100%;
-            background: #151517; border-radius: 24px 24px 0 0;
-            z-index: 1000; padding: 20px; box-sizing: border-box;
-            transition: bottom 0.4s cubic-bezier(0.32, 1, 0.23, 1);
-            max-height: 90vh; overflow-y: auto;
+            height: 70vh; background: #151517; border-radius: 20px 20px 0 0;
+            z-index: 200; transition: transform 0.4s ease;
+            padding: 20px; box-sizing: border-box; text-align: center;
         }
-        .sheet.active { bottom: 0; }
-        .handle { width: 40px; height: 5px; background: #333; border-radius: 10px; margin: 0 auto 20px; }
-
-        /* NAV BAR */
-        .nav {
-            position: fixed; bottom: 0; width: 100%; max-width: 430px;
-            background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(20px);
-            display: flex; justify-content: space-around; padding: 12px 0 30px;
-            border-top: 0.5px solid #333; z-index: 500;
+        .bottom-sheet.open { transform: translateY(-100%); }
+        .card-big {
+            width: 100%; border-radius: 15px; margin-top: 20px;
         }
-        .nav-item { text-align: center; color: var(--text-gray); font-size: 10px; flex: 1; }
-        .nav-item.active { color: var(--accent-blue); }
-        .nav-icon { font-size: 24px; margin-bottom: 4px; }
-
-        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-<div class="app">
-    <div class="header">
-        <div class="profile">
-            <div class="avatar">М</div>
-            <div class="user-info">Матыгин ›</div>
-        </div>
-        <div class="bonus-badge">🎁 Бонус</div>
-    </div>
-
-    <div class="search-box">
-        <span>🔍</span>
-        <input type="text" id="mainSearch" placeholder="Поиск">
-    </div>
-
-    <div id="content">
-        <div class="stories">
-            <div class="story" style="background: linear-gradient(135deg, #1a2a6c, #b21f1f);">Как вести себя в комментах</div>
-            <div class="story" style="background: linear-gradient(135deg, #d4145a, #fbb03b);">Майское гадание</div>
-            <div class="story" style="background: linear-gradient(135deg, #00b09b, #96c93d);">М-м-м, что тут у нас?</div>
-            <div class="story" style="background: #333;">Фото недели</div>
-        </div>
-
-        <div class="grid">
-            <div class="card search-item" data-tags="траты расходы история">
-                <h3>Все операции</h3>
-                <p>Трат в мае 1 159 ₽</p>
-                <div class="progress-bar"></div>
-            </div>
-            <div class="card search-item" data-tags="кэшбэк бонусы акции">
-                <h3>Кэшбэк и бонусы</h3>
-                <p>Выгода 0 ₽</p>
-            </div>
-        </div>
-
-        <div class="account-card search-item" data-tags="баланс счет деньги карты" onclick="openAccount()">
-            <div class="account-info">
-                <div class="acc-icon">₽</div>
-                <div>
-                    <div class="acc-balance">5,41 ₽</div>
-                    <div class="acc-name">Мой счет</div>
-                </div>
-            </div>
-            <div style="color: #444;">⚙️</div>
-        </div>
-    </div>
+<div class="app-wrapper">
+    <!-- Интерактивные элементы поверх фона -->
+    <div class="element search-bar" onclick="alert('Поиск...')"></div>
+    <div class="element bonus-section" onclick="alert('Кэшбэк открыт')"></div>
+    <div class="element account-section" onclick="openCard()"></div>
+    <div class="element quest-section" onclick="alert('Квест начат!')"></div>
 </div>
 
-<div class="overlay" id="overlay" onclick="closeAccount()"></div>
-<div class="sheet" id="accountSheet">
-    <div class="handle"></div>
-    <h2 style="margin: 0 0 5px 0;">Мой счет</h2>
-    <div style="font-size: 34px; font-weight: 800; margin-bottom: 30px;">5,41 ₽</div>
-    
-    <div style="background: white; width: 160px; height: 160px; margin: 0 auto 10px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: black; font-weight: 900; font-size: 20px;">QR CODE</div>
-    <p style="text-align: center; color: var(--text-gray); margin-bottom: 30px;">QR-код для пополнения</p>
-
-    <div style="background: var(--secondary); border-radius: 16px; padding: 10px;">
-        <div style="display: flex; justify-content: space-between; padding: 12px; border-bottom: 0.5px solid #444;">
-            <span style="color: var(--text-gray);">Тариф</span> <span>Black Premium</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; padding: 12px; border-bottom: 0.5px solid #444;">
-            <span style="color: var(--text-gray);">Лимит переводов</span> <span>150 000 ₽</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; padding: 12px;">
-            <span style="color: var(--text-gray);">Реквизиты</span> <span style="color: var(--accent-blue)">Скопировать</span>
-        </div>
-    </div>
-    
-    <button onclick="closeAccount()" style="width: 100%; margin-top: 20px; padding: 16px; border-radius: 16px; border: none; background: #333; color: white; font-weight: 600; font-size: 16px;">Готово</button>
+<!-- Окно при клике на карту -->
+<div class="modal-overlay" id="overlay" onclick="closeCard()"></div>
+<div class="bottom-sheet" id="sheet">
+    <div style="width: 40px; height: 4px; background: #333; margin: 0 auto 15px; border-radius: 2px;"></div>
+    <h2 style="color: white; margin: 0;">Ваша карта</h2>
+    <!-- Здесь используем ту же картинку карты, но крупнее -->
+    <img src="карта.jpg" class="card-big">
+    <p style="color: #8e8e93; margin-top: 20px;">Баланс: 5,41 ₽</p>
+    <button onclick="closeCard()" style="width: 100%; padding: 15px; border-radius: 12px; border: none; background: #2c2c2e; color: white; font-weight: bold; margin-top: 20px;">Закрыть</button>
 </div>
-
-<nav class="nav">
-    <div class="nav-item active"><div class="nav-icon">🛡️</div>Главная</div>
-    <div class="nav-item"><div class="nav-icon">💸</div>Платежи</div>
-    <div class="nav-item"><div class="nav-icon">🏙️</div>Город</div>
-    <div class="nav-item"><div class="nav-icon">💬</div>Чат</div>
-</nav>
 
 <script>
-    // Живой поиск
-    const searchInput = document.getElementById('mainSearch');
-    const searchItems = document.querySelectorAll('.search-item');
-
-    searchInput.addEventListener('input', (e) => {
-        const val = e.target.value.toLowerCase();
-        searchItems.forEach(item => {
-            const tags = item.dataset.tags;
-            const text = item.innerText.toLowerCase();
-            if (text.includes(val) || tags.includes(val)) {
-                item.classList.remove('hidden');
-            } else {
-                item.classList.add('hidden');
-            }
-        });
-    });
-
-    // Управление меню счета
-    function openAccount() {
-        document.getElementById('accountSheet').classList.add('active');
+    function openCard() {
+        document.getElementById('sheet').classList.add('open');
         document.getElementById('overlay').style.display = 'block';
     }
-
-    function closeAccount() {
-        document.getElementById('accountSheet').classList.remove('active');
+    function closeCard() {
+        document.getElementById('sheet').classList.remove('open');
         document.getElementById('overlay').style.display = 'none';
     }
 </script>
