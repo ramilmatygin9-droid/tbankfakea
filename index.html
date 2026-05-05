@@ -3,200 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Interactive Mockup</title>
+    <title>T-Bank Premium</title>
     <style>
         :root {
-            --bg-color: #000;
-            --sheet-bg: #1c1c1e;
-            --text-main: #fff;
-            --accent-blue: #007aff;
+            --bg: #000000;
+            --card: #1c1c1e;
+            --secondary: #2c2c2e;
+            --text-main: #ffffff;
+            --text-gray: #8e8e93;
+            --accent-purple: #7b43f1;
+            --accent-blue: #0a84ff;
         }
 
         body {
             margin: 0;
-            background: var(--bg-color);
-            font-family: -apple-system, sans-serif;
-            overflow: hidden; /* Чтобы не скроллился сам экран телефона */
-        }
-
-        .phone-mockup {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            max-width: 430px;
-            margin: 0 auto;
-            background: url('photo_2026-05-05_15-06-07.jpg') no-repeat center top;
-            background-size: contain;
-        }
-
-        /* Зона поиска поверх изображения */
-        .search-trigger {
-            position: absolute;
-            top: 15%; /* Подгоните под область "Поиск" на вашем фото */
-            left: 5%;
-            width: 90%;
-            height: 45px;
-        }
-
-        #realSearch {
-            width: 100%;
-            height: 100%;
-            background: rgba(28, 28, 30, 0.8);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            padding: 0 15px;
-            box-sizing: border-box;
-            outline: none;
-        }
-
-        /* Зона клика "Мой счет" */
-        .account-trigger {
-            position: absolute;
-            top: 61%; /* Подгоните под блок счета на вашем фото */
-            left: 5%;
-            width: 90%;
-            height: 80px;
-            cursor: pointer;
-        }
-
-        /* Плавное меню (Bottom Sheet) */
-        .bottom-sheet {
-            position: fixed;
-            bottom: -100%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 430px;
-            height: 85vh;
-            background: var(--sheet-bg);
-            border-radius: 20px 20px 0 0;
-            transition: bottom 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-            z-index: 100;
-            color: white;
+            padding: 0;
+            background-color: var(--bg);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-main);
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .bottom-sheet.open {
-            bottom: 0;
-        }
-
-        .handle {
-            width: 40px;
-            height: 5px;
-            background: #3a3a3c;
-            border-radius: 10px;
-            margin: 12px auto;
-        }
-
-        .sheet-content {
-            padding: 20px;
-            overflow-y: auto;
-            flex-grow: 1;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .app {
             width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            display: none;
-            z-index: 90;
+            max-width: 430px;
+            min-height: 100vh;
+            padding: env(safe-area-inset-top) 16px 100px 16px;
+            box-sizing: border-box;
         }
 
-        /* Стили контента внутри меню */
-        .section { margin-bottom: 25px; border-bottom: 1px solid #2c2c2e; padding-bottom: 15px; }
-        .row { display: flex; justify-content: space-between; margin: 12px 0; }
-        .label { color: #8e8e93; }
-        .qr-placeholder { background: white; width: 150px; height: 150px; margin: 10px auto; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: black; font-weight: bold; }
-        .btn-more { color: var(--accent-blue); font-weight: 600; cursor: pointer; }
+        /* HEADER */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        .profile { display: flex; align-items: center; gap: 12px; }
+        .avatar { 
+            width: 40px; height: 40px; background: var(--secondary); 
+            border-radius: 50%; display: flex; align-items: center; 
+            justify-content: center; font-weight: bold; font-size: 18px;
+        }
+        .user-info { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+        .bonus-badge { 
+            background: var(--accent-purple); padding: 8px 14px; 
+            border-radius: 12px; font-size: 13px; font-weight: 600; 
+        }
+
+        /* SEARCH */
+        .search-box {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .search-box input {
+            background: transparent; border: none; color: white;
+            font-size: 17px; width: 100%; outline: none;
+        }
+
+        /* STORIES */
+        .stories {
+            display: flex; gap: 10px; overflow-x: auto;
+            margin: 0 -16px 24px -16px; padding: 0 16px;
+            scrollbar-width: none;
+        }
+        .stories::-webkit-scrollbar { display: none; }
+        .story {
+            min-width: 104px; height: 130px; border-radius: 16px;
+            padding: 12px; font-size: 12px; font-weight: 600;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            background-size: cover; border: 1px solid #333;
+        }
+
+        /* GRID CARDS */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+        .card { background: var(--card); border-radius: 20px; padding: 20px; position: relative; }
+        .card h3 { margin: 0; font-size: 17px; font-weight: 600; }
+        .card p { color: var(--text-gray); font-size: 14px; margin: 6px 0 0 0; }
         
-        .sub-menu { display: none; padding-top: 10px; background: #2c2c2e; border-radius: 10px; padding: 10px; margin-top: 10px; }
+        .progress-bar {
+            height: 4px; background: linear-gradient(90deg, #ff9500, #ff2d55, #5856d6);
+            border-radius: 2px; margin-top: 15px; width: 80%;
+        }
+
+        /* ACCOUNT */
+        .account-card {
+            background: var(--card); border-radius: 24px; padding: 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; transition: transform 0.1s;
+        }
+        .account-card:active { transform: scale(0.98); }
+        .account-info { display: flex; align-items: center; gap: 16px; }
+        .acc-icon { 
+            width: 44px; height: 44px; background: #2c2c2e; 
+            border-radius: 50%; display: flex; align-items: center; 
+            justify-content: center; color: var(--accent-blue); font-weight: bold;
+        }
+        .acc-balance { font-size: 19px; font-weight: 700; }
+        .acc-name { color: var(--text-gray); font-size: 14px; }
+
+        /* BOTTOM MENU (SHEET) */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 999; display: none;
+        }
+        .sheet {
+            position: fixed; bottom: -100%; left: 0; width: 100%;
+            background: #151517; border-radius: 24px 24px 0 0;
+            z-index: 1000; padding: 20px; box-sizing: border-box;
+            transition: bottom 0.4s cubic-bezier(0.32, 1, 0.23, 1);
+            max-height: 90vh; overflow-y: auto;
+        }
+        .sheet.active { bottom: 0; }
+        .handle { width: 40px; height: 5px; background: #333; border-radius: 10px; margin: 0 auto 20px; }
+
+        /* NAV BAR */
+        .nav {
+            position: fixed; bottom: 0; width: 100%; max-width: 430px;
+            background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(20px);
+            display: flex; justify-content: space-around; padding: 12px 0 30px;
+            border-top: 0.5px solid #333; z-index: 500;
+        }
+        .nav-item { text-align: center; color: var(--text-gray); font-size: 10px; flex: 1; }
+        .nav-item.active { color: var(--accent-blue); }
+        .nav-icon { font-size: 24px; margin-bottom: 4px; }
+
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-<div class="phone-mockup">
-    <!-- Поле поиска -->
-    <div class="search-trigger">
-        <input type="text" id="realSearch" placeholder="Поиск по операциям...">
+<div class="app">
+    <div class="header">
+        <div class="profile">
+            <div class="avatar">М</div>
+            <div class="user-info">Матыгин ›</div>
+        </div>
+        <div class="bonus-badge">🎁 Бонус</div>
     </div>
 
-    <!-- Кликабельная зона счета -->
-    <div class="account-trigger" onclick="openSheet()"></div>
-</div>
+    <div class="search-box">
+        <span>🔍</span>
+        <input type="text" id="mainSearch" placeholder="Поиск">
+    </div>
 
-<!-- Затемнение фона -->
-<div class="overlay" id="overlay" onclick="closeSheet()"></div>
-
-<!-- Выезжающее меню -->
-<div class="bottom-sheet" id="sheet">
-    <div class="handle"></div>
-    <div class="sheet-content">
-        <h2>Мой счет</h2>
-        
-        <div class="section">
-            <div class="row"><span>Карта *2686</span> <strong>5,41 ₽</strong></div>
-            <div class="row"><span class="label">Баллы лояльности</span> <span>124 б.</span></div>
+    <div id="content">
+        <div class="stories">
+            <div class="story" style="background: linear-gradient(135deg, #1a2a6c, #b21f1f);">Как вести себя в комментах</div>
+            <div class="story" style="background: linear-gradient(135deg, #d4145a, #fbb03b);">Майское гадание</div>
+            <div class="story" style="background: linear-gradient(135deg, #00b09b, #96c93d);">М-м-м, что тут у нас?</div>
+            <div class="story" style="background: #333;">Фото недели</div>
         </div>
 
-        <div class="section">
-            <h3>Операции за май</h3>
-            <div class="row"><span>Супермаркеты</span> <span>-850 ₽</span></div>
-            <div class="row"><span>Аптеки</span> <span>-309 ₽</span></div>
-        </div>
-
-        <div class="section" style="text-align: center;">
-            <h3>QR-код для пополнения</h3>
-            <div class="qr-placeholder">QR CODE</div>
-            <p class="label">Покажите этот код для перевода</p>
-        </div>
-
-        <div class="section">
-            <div class="btn-more" onclick="toggleExtra()">Дополнительно ▼</div>
-            <div id="extraMenu" class="sub-menu">
-                <div class="row"><span class="label">Лимит на переводы</span> <span>150 000 ₽</span></div>
-                <div class="row"><span class="label">Лимит на снятие</span> <span>50 000 ₽</span></div>
-                <div class="row"><span class="label">Тариф</span> <span>Black Premium</span></div>
-                <div class="row"><span class="label">Реквизиты счета</span> <span style="color:var(--accent-blue)">Копировать</span></div>
+        <div class="grid">
+            <div class="card search-item" data-tags="траты расходы история">
+                <h3>Все операции</h3>
+                <p>Трат в мае 1 159 ₽</p>
+                <div class="progress-bar"></div>
+            </div>
+            <div class="card search-item" data-tags="кэшбэк бонусы акции">
+                <h3>Кэшбэк и бонусы</h3>
+                <p>Выгода 0 ₽</p>
             </div>
         </div>
-        
-        <button onclick="closeSheet()" style="width:100%; padding:15px; border-radius:12px; border:none; background:#2c2c2e; color:white; font-size:16px;">Закрыть</button>
+
+        <div class="account-card search-item" data-tags="баланс счет деньги карты" onclick="openAccount()">
+            <div class="account-info">
+                <div class="acc-icon">₽</div>
+                <div>
+                    <div class="acc-balance">5,41 ₽</div>
+                    <div class="acc-name">Мой счет</div>
+                </div>
+            </div>
+            <div style="color: #444;">⚙️</div>
+        </div>
     </div>
 </div>
 
+<div class="overlay" id="overlay" onclick="closeAccount()"></div>
+<div class="sheet" id="accountSheet">
+    <div class="handle"></div>
+    <h2 style="margin: 0 0 5px 0;">Мой счет</h2>
+    <div style="font-size: 34px; font-weight: 800; margin-bottom: 30px;">5,41 ₽</div>
+    
+    <div style="background: white; width: 160px; height: 160px; margin: 0 auto 10px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: black; font-weight: 900; font-size: 20px;">QR CODE</div>
+    <p style="text-align: center; color: var(--text-gray); margin-bottom: 30px;">QR-код для пополнения</p>
+
+    <div style="background: var(--secondary); border-radius: 16px; padding: 10px;">
+        <div style="display: flex; justify-content: space-between; padding: 12px; border-bottom: 0.5px solid #444;">
+            <span style="color: var(--text-gray);">Тариф</span> <span>Black Premium</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 12px; border-bottom: 0.5px solid #444;">
+            <span style="color: var(--text-gray);">Лимит переводов</span> <span>150 000 ₽</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 12px;">
+            <span style="color: var(--text-gray);">Реквизиты</span> <span style="color: var(--accent-blue)">Скопировать</span>
+        </div>
+    </div>
+    
+    <button onclick="closeAccount()" style="width: 100%; margin-top: 20px; padding: 16px; border-radius: 16px; border: none; background: #333; color: white; font-weight: 600; font-size: 16px;">Готово</button>
+</div>
+
+<nav class="nav">
+    <div class="nav-item active"><div class="nav-icon">🛡️</div>Главная</div>
+    <div class="nav-item"><div class="nav-icon">💸</div>Платежи</div>
+    <div class="nav-item"><div class="nav-icon">🏙️</div>Город</div>
+    <div class="nav-item"><div class="nav-icon">💬</div>Чат</div>
+</nav>
+
 <script>
-    const sheet = document.getElementById('sheet');
-    const overlay = document.getElementById('overlay');
-    const extraMenu = document.getElementById('extraMenu');
+    // Живой поиск
+    const searchInput = document.getElementById('mainSearch');
+    const searchItems = document.querySelectorAll('.search-item');
 
-    function openSheet() {
-        sheet.classList.add('open');
-        overlay.style.display = 'block';
-    }
-
-    function closeSheet() {
-        sheet.classList.remove('open');
-        overlay.style.display = 'none';
-    }
-
-    function toggleExtra() {
-        if (extraMenu.style.display === 'block') {
-            extraMenu.style.display = 'none';
-        } else {
-            extraMenu.style.display = 'block';
-        }
-    }
-
-    // Имитация поиска
-    document.getElementById('realSearch').addEventListener('input', (e) => {
-        console.log("Ищем:", e.target.value);
-        // Здесь можно добавить фильтрацию списка операций
+    searchInput.addEventListener('input', (e) => {
+        const val = e.target.value.toLowerCase();
+        searchItems.forEach(item => {
+            const tags = item.dataset.tags;
+            const text = item.innerText.toLowerCase();
+            if (text.includes(val) || tags.includes(val)) {
+                item.classList.remove('hidden');
+            } else {
+                item.classList.add('hidden');
+            }
+        });
     });
+
+    // Управление меню счета
+    function openAccount() {
+        document.getElementById('accountSheet').classList.add('active');
+        document.getElementById('overlay').style.display = 'block';
+    }
+
+    function closeAccount() {
+        document.getElementById('accountSheet').classList.remove('active');
+        document.getElementById('overlay').style.display = 'none';
+    }
 </script>
 
 </body>
